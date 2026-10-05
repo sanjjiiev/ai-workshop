@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import type { LeaderboardEntry } from '@/types'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 export const revalidate = 60 // ISR: revalidate every 60 seconds
 
 export async function GET(): Promise<NextResponse> {

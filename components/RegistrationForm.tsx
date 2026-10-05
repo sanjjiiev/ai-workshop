@@ -22,14 +22,19 @@ interface Props {
 export default function RegistrationForm({ defaultReferralCode = '', onSuccess }: Props) {
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  // FormDefaults allows terms:boolean so useForm defaultValues don't throw TS errors.
+  // Zod resolver still enforces terms===true at runtime on submit.
+  type FormDefaults = Omit<RegistrationInput, 'terms'> & { terms: boolean }
+
   const {
     register,
     handleSubmit,
     watch,
     setValue,
     formState: { errors },
-  } = useForm<RegistrationInput>({
-    resolver: zodResolver(registrationSchema),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } = useForm<FormDefaults>({
+    resolver: zodResolver(registrationSchema) as any,
     defaultValues: {
       referralCode: defaultReferralCode,
       terms: false,
@@ -39,7 +44,7 @@ export default function RegistrationForm({ defaultReferralCode = '', onSuccess }
   const watchedTrack = watch('track')
   const watchedTerms = watch('terms')
 
-  const onSubmit = async (data: RegistrationInput) => {
+  const onSubmit = async (data: FormDefaults) => {
     setIsSubmitting(true)
     try {
       const referral_code = generateReferralCode(data.name)
@@ -208,7 +213,7 @@ export default function RegistrationForm({ defaultReferralCode = '', onSuccess }
       <div className="flex items-start gap-3">
         <button
           type="button"
-          onClick={() => setValue('terms', !watchedTerms, { shouldValidate: true })}
+          onClick={() => setValue('terms', !watchedTerms as boolean, { shouldValidate: true })}
           className={cn(
             'mt-0.5 w-5 h-5 rounded-md border flex-shrink-0 flex items-center justify-center transition-all',
             watchedTerms

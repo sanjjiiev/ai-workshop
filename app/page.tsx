@@ -3,15 +3,18 @@ import { createAdminClient } from '@/lib/supabase/server'
 import HomePage from '@/components/HomePage'
 import type { LeaderboardEntry } from '@/types'
 
+export const dynamic = 'force-dynamic'
+
 /* ── Server Component: fetch all initial data ── */
 export default async function Page({
   searchParams,
 }: {
-  searchParams: { ref?: string }
+  searchParams: Promise<{ ref?: string }>
 }) {
   const supabase            = createAdminClient()
   const totalSeats          = Number(process.env.NEXT_PUBLIC_TOTAL_SEATS ?? 500)
-  const defaultReferralCode = searchParams?.ref?.toUpperCase() ?? ''
+  const { ref }             = await searchParams
+  const defaultReferralCode = ref?.toUpperCase() ?? ''
 
   // Fetch seat count and leaderboard in parallel
   const [countRes, lbRes] = await Promise.allSettled([

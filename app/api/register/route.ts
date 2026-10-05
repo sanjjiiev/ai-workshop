@@ -5,7 +5,7 @@ import { generateWelcomeMessage } from '@/lib/openrouter'
 import { registrationSchema } from '@/lib/validations'
 import type { RegisterApiResponse } from '@/types'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 export async function POST(req: NextRequest): Promise<NextResponse<RegisterApiResponse>> {
   try {
@@ -79,7 +79,7 @@ export async function POST(req: NextRequest): Promise<NextResponse<RegisterApiRe
       track,
       referral_code,
       referred_by:  validReferredBy,
-      ip_address:   req.headers.get('x-forwarded-for') ?? req.ip ?? null,
+      ip_address:   req.headers.get('x-forwarded-for') ?? req.headers.get('x-real-ip') ?? null,
       user_agent:   req.headers.get('user-agent') ?? null,
     })
 

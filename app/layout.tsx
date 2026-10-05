@@ -22,10 +22,11 @@ const jetbrainsMono = JetBrains_Mono({
 })
 
 export const metadata: Metadata = {
+  metadataBase: new URL(process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'),
   title: 'Build Your First AI Project in 60 Minutes | NxtWave',
   description:
     'Go from zero to shipping a working AI-powered app in one live session. Free, hands-on, built for university students.',
-  keywords: ['AI workshop', 'NxtWave', 'Gemini API', 'DeepSeek', 'AI project', 'free workshop', 'coding'],
+  keywords: ['AI workshop', 'NxtWave', 'DeepSeek', 'AI project', 'free workshop', 'coding'],
   authors: [{ name: 'NxtWave' }],
   openGraph: {
     title: 'Build Your First AI Project in 60 Minutes',

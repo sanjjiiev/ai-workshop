@@ -1,13 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 
-export const runtime = 'edge'
+export const runtime = 'nodejs'
 
 export async function GET(
   _req: NextRequest,
-  { params }: { params: { code: string } }
+  { params }: { params: Promise<{ code: string }> }
 ): Promise<NextResponse> {
-  const code = params.code?.toUpperCase()
+  const { code: rawCode } = await params
+  const code = rawCode?.toUpperCase()
 
   if (!code || code.length < 6) {
     return NextResponse.json({ error: 'Invalid referral code' }, { status: 400 })

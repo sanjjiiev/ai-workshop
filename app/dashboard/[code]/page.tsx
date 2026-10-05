@@ -10,10 +10,11 @@ import { Trophy, Users, TrendingUp, Copy, Share2, Calendar, Sparkles } from 'luc
 export async function generateMetadata({
   params,
 }: {
-  params: { code: string }
+  params: Promise<{ code: string }>
 }): Promise<Metadata> {
+  const { code } = await params
   return {
-    title: `Referral Dashboard · ${params.code} | NxtWave AI Workshop`,
+    title: `Referral Dashboard · ${code} | NxtWave AI Workshop`,
     description: 'Track your referrals and unlock rewards for the Build Your First AI Project workshop.',
   }
 }
@@ -22,9 +23,10 @@ export async function generateMetadata({
 export default async function DashboardPage({
   params,
 }: {
-  params: { code: string }
+  params: Promise<{ code: string }>
 }) {
-  const code     = params.code?.toUpperCase()
+  const { code: rawCode } = await params
+  const code     = rawCode?.toUpperCase()
   const supabase = createAdminClient()
   const appUrl   = process.env.NEXT_PUBLIC_APP_URL ?? 'http://localhost:3000'
 
